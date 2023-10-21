@@ -1,0 +1,34 @@
+{
+  "name": "ridges.js",
+  "version": "0.0.1",
+  "description": "Create and visualize ridge plots",
+  "repository": "https://github.com/jkanche/ridges.js",
+  "homepage": "https://github.com/jkanche/ridges.js#readme",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jsdoc": "npx jsdoc src README.md -d docs/built -c docs/jsdoc.config.json"
+  },
+  "keywords": [
+    "ridge",
+    "plots",
+    "visualization"
+  ],
+  "author": {
+    "name": "Jayaram Kancherla",
+    "email": "jayaram.kancherla@gmail.com",
+    "url": "https://www.jkanche.com"
+  },
+  "license": "MIT",
+  "bugs": "https://github.com/jkanche/ridges.js/issues",
+  "dependencies": {
+    "d3-format": "^3.1.0",
+    "d3-scale-chromatic": "^3.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3",
+    "docdash": "^1.2.0",
+    "jsdoc": "^3.6.10"
+  }
+}
