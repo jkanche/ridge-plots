@@ -18,8 +18,8 @@ jobs:
       - name: install dependencies
         run: yarn install
 
-      - name: create builds
-        run: yarn build
+      # - name: create builds
+      #   run: yarn build
 
       - name: Publish to NPM
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
