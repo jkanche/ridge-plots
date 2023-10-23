@@ -1,6 +1,12 @@
 // import * as d3 from "d3";
 import { RidgePlot } from "./RidgePlot.js";
 
+/**
+ * Make a vertical ridgeline plot
+ *
+ * @class VerticalRidgePlot
+ * @extends {RidgePlot}
+ */
 export class VerticalRidgePlot extends RidgePlot {
   /**
    * Creates an instance of VerticalRidgePlot.

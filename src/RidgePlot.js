@@ -1,3 +1,9 @@
+/**
+ * Base class for ridge plots.
+ * This class is not to be used directly.
+ *
+ * @class RidgePlot
+ */
 export class RidgePlot {
   /**
    * Creates an instance of BaseGL.
@@ -38,7 +44,7 @@ export class RidgePlot {
    * median, mean, min, max & all values
    *
    * @param {object} data, input data to set
-   * @memberof VerticalRidgePlot
+   * @memberof RidgePlot
    */
   setInput(data) {
     this.data = data;
