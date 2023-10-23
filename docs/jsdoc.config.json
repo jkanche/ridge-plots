@@ -15,16 +15,10 @@
         "scripts": [],
         "menu": {
             "Github repo": {
-                "href": "https://github.com/jkanche/epiviz.heatmap.js",
+                "href": "https://github.com/jkanche/ridges.js",
                 "target": "_blank",
                 "class": "menu-item",
                 "id": "repository"
-            },
-            "Demo": {
-                "href": "https://www.jkanche.com/epiviz.heatmap.gl/",
-                "target": "_blank",
-                "class": "menu-item",
-                "id": "demo"
             }
         }
     },
