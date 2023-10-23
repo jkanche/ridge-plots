@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ridge line plots in JavaScript">
+    <meta name="keywords" content="ridge plots, JavaScript">
+    <meta name="author" content="Jayaram Kancherla">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v3.min.js"></script>
+</head>
+
+<body>
+
+    <H2>A simple ridgeline plot</H2>
+
+    <div class="ridgeline-vertical"></div>
+    <div class="ridgeline-horizontal"></div>
+
+    <script type="module">
+        import { VerticalRidgePlot, HorizontalRidgePlot } from "./src/index.js";
+        import { data } from "./data.js";
+
+        console.log(data);
+
+        let vridge = new VerticalRidgePlot(".ridgeline-vertical");
+        vridge.setState({
+            title: "Temperature (vertical layout)",
+            xLabel: "months",
+            yLabel: "temperature",
+            metric: "mean",
+            gradient: false
+        });
+
+        vridge.setInput(data);
+        vridge.render(300, 500);
+
+
+        let hridge = new HorizontalRidgePlot(".ridgeline-horizontal");
+        hridge.setState({
+            title: "Temperature (horizontal layout)",
+            yLabel: "months",
+            xLabel: "temperature",
+            metric: "mean",
+            gradient: false
+        });
+
+        hridge.setInput(data);
+
+        hridge.render(600, 290);
+    </script>
+
+</body>
+
+</html>
