@@ -32,8 +32,8 @@ jobs:
     # - name: create builds
     #   run: yarn build
 
-    - name: copy build to app
-      run: cp -r dist/* app
+    # - name: copy build to app
+    #   run: cp -r dist/* app
 
     - name: copy docs to app
       run: cp -r docs/built/* app/docs
