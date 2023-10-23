@@ -1,14 +1,17 @@
 // import * as d3 from "d3";
 import { RidgePlot } from "./RidgePlot.js";
 
-export class VerticalRidgePlot extends RidgePlot {
+export class HorizontalRidgePlot extends RidgePlot {
   /**
-   * Creates an instance of VerticalRidgePlot.
+   * Creates an instance of HorizontalRidgePlot.
    * @param {string} selectorOrElement, a html dom selector or element.
-   * @memberof VerticalRidgePlot
+   * @memberof HorizontalRidgePlot
    */
   constructor(selectorOrElement) {
     super(selectorOrElement);
+
+    this._width = document.body.clientWidth * 0.9;
+    this._height = 500;
   }
 
   /**
@@ -21,10 +24,10 @@ export class VerticalRidgePlot extends RidgePlot {
    * @param {string} state.yLabel, y-label of the plot
    * @param {string} state.metric, name of the metric to plot
    * @param {boolean} state.gradient, use a gradient to color the ridges?
-   * @param {Array} state.yminmax, use a custom min and max for the y axis.
+   * @param {Array} state.xminmax, use a custom min and max for the x axis.
    * @param {Function} state.onClick, Use a custom OnClick callback when groups are clicked.
    * @param {Number} state.ticks, number of ticks for histogram
-   * @memberof VerticalRidgePlot
+   * @memberof HorizontalRidgePlot
    */
   setState(state) {
     this.state = state;
@@ -35,14 +38,15 @@ export class VerticalRidgePlot extends RidgePlot {
    *
    * @param {?number} width, width of the canvas to render the plot.
    * @param {?number} height, height of the canvas to render the plot.
-   * @memberof VerticalRidgePlot
+   * @memberof HorizontalRidgePlot
    */
-  render(width = 400, height = 400) {
+  render(width, height) {
     this._check_for_data();
 
-    const margin = { top: 10, right: 10, bottom: 150, left: 30 };
+    const margin = { top: 10, right: 10, bottom: 40, left: 150 };
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
+
     let self = this;
 
     if (this.elem.querySelector("svg")) {
@@ -57,7 +61,7 @@ export class VerticalRidgePlot extends RidgePlot {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    var x = d3.scaleBand().range([0, width]).domain(this._dkeys).padding(0.2);
+    var y = d3.scaleBand().range([0, height]).domain(this._dkeys).padding(0.2);
 
     this._setTitleAndFooter(svg);
 
@@ -71,10 +75,18 @@ export class VerticalRidgePlot extends RidgePlot {
         .text(this.state.yLabel);
     }
 
-    let xAxis = svg
-      .append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+    if ("xLabel" in this.state) {
+      svg
+        .append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width / 2)
+        .attr("y", height + 30)
+        .style("font-size", "12px")
+        // .attr("transform", "rotate(-90)")
+        .text(this.state.xLabel);
+    }
+
+    let yAxis = svg.append("g").call(d3.axisLeft(y));
 
     var wrap = function () {
       var self = d3.select(this),
@@ -87,7 +99,7 @@ export class VerticalRidgePlot extends RidgePlot {
       }
     };
 
-    xAxis
+    yAxis
       .selectAll("text")
       .style("color", "#133355")
       .style("cursor", "pointer")
@@ -119,7 +131,7 @@ export class VerticalRidgePlot extends RidgePlot {
             )}</span><br/><span>mean: ${mets?.mean.toFixed(
               2
             )}</span><br/><span>min: ${mets?.min.toFixed(2)}</span>
-            <br/><span>max: ${mets?.max.toFixed(2)}</span>`
+              <br/><span>max: ${mets?.max.toFixed(2)}</span>`
           )
           .style("left", x(d) + 20 + "px")
           .style("top", height + "px");
@@ -136,16 +148,19 @@ export class VerticalRidgePlot extends RidgePlot {
         }
       });
 
-    let yminmax;
-    if ("yminmax" in this.state) {
-      yminmax = this.state.yminmax;
+    let xminmax;
+    if ("xminmax" in this.state) {
+      xminmax = this.state.xminmax;
     } else {
-      yminmax = d3.extent(this._dentries.map((x) => Math.max(...x[1].values)));
+      xminmax = d3.extent(this._dentries.map((x) => Math.max(...x[1].values)));
     }
 
-    var y = d3.scaleLinear().domain([0, yminmax[1]]).range([height, 0]).nice();
+    var x = d3.scaleLinear().domain([0, xminmax[1]]).range([0, width]).nice();
 
-    svg.append("g").call(d3.axisLeft(y));
+    svg
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
 
     // OPTION 1: Compute kernel density estimation for each column:
     // let kde = kernelDensityEstimator(kernelEpanechnikov(1.25), y.ticks(40));
@@ -166,8 +181,8 @@ export class VerticalRidgePlot extends RidgePlot {
     // Features of the histogram
     var histogram = d3
       .bin()
-      .domain(y.domain())
-      .thresholds(y.ticks(20))
+      .domain(x.domain())
+      .thresholds(x.ticks(20))
       .value((d) => d);
 
     let sumstat = [];
@@ -182,14 +197,14 @@ export class VerticalRidgePlot extends RidgePlot {
       colorScale = d3
         .scaleSequential()
         .interpolator(d3.interpolateInferno)
-        .domain([0, yminmax[1]]);
+        .domain([0, xminmax[1]]);
     }
 
-    function getColor(i) {
+    function getColor(d) {
       if (typeof colorScale === "string" || colorScale instanceof String) {
         return colorScale;
       } else {
-        return colorScale(self.data[d.key][self.state.metric]);
+        return colorScale(self.data[d][self.state.metric]);
       }
     }
 
@@ -200,7 +215,7 @@ export class VerticalRidgePlot extends RidgePlot {
       .enter()
       .append("g")
       .attr("transform", function (d) {
-        return "translate(" + x(d.key) + " ,0)";
+        return "translate(" + "0, " + y(d.key) + ")";
       })
       .append("path")
       .attr("fill", function (d, i) {
@@ -221,19 +236,19 @@ export class VerticalRidgePlot extends RidgePlot {
           })
         );
 
-        let xCurves = d3
+        let yCurves = d3
           .scaleLinear()
-          .range([0, x.bandwidth() * 1.4])
+          .range([0, y.bandwidth() * 1.4])
           .domain([lengths, -lengths]);
 
         return d3
           .area()
-          .x0(xCurves(0))
-          .x1(function (d) {
-            return xCurves(d.length);
+          .y0(yCurves(0))
+          .y1(function (d) {
+            return yCurves(d.length);
           })
-          .y(function (d) {
-            return y(d.x0);
+          .x(function (d) {
+            return x(d.x0);
           })
           .curve(d3.curveCatmullRom)(bin.value);
       })
@@ -251,10 +266,10 @@ export class VerticalRidgePlot extends RidgePlot {
             )}</span><br/><span>mean: ${mets?.mean.toFixed(
               2
             )}</span><br/><span>min: ${mets?.min.toFixed(2)}</span>
-            <br/><span>max: ${mets?.max.toFixed(2)}</span>`
+              <br/><span>max: ${mets?.max.toFixed(2)}</span>`
           )
-          .style("left", x(d.key) + 20 + "px")
-          .style("top", propheight - margin.top - margin.bottom + "px");
+          .style("left", 100 + "px")
+          .style("top", y(d.key) + "px");
       })
       .on("mouseout", function (event, d) {
         this._hoverKey = null;
@@ -268,17 +283,17 @@ export class VerticalRidgePlot extends RidgePlot {
     bars
       .enter()
       .append("line")
-      .attr("x1", (d) => {
-        return x(d[0]) + x.bandwidth() * bar_width_ratio;
-      })
-      .attr("x2", (d) => {
-        return x(d[0]) + x.bandwidth() * bar_width_ratio;
-      })
       .attr("y1", (d) => {
-        return y(d[1]?.min);
+        return y(d[0]) + y.bandwidth() * bar_width_ratio;
       })
       .attr("y2", (d) => {
-        return y(d[1]?.max);
+        return y(d[0]) + y.bandwidth() * bar_width_ratio;
+      })
+      .attr("x1", (d) => {
+        return x(d[1]?.min);
+      })
+      .attr("x2", (d) => {
+        return x(d[1]?.max);
       })
       .attr("stroke", "#353535")
       .style("stroke-opacity", 0.7);
@@ -293,15 +308,15 @@ export class VerticalRidgePlot extends RidgePlot {
     bars
       .enter()
       .append("rect")
-      .attr("x", (d) => {
-        return x(d[0]) + x.bandwidth() * bar_width_ratio;
-      })
       .attr("y", (d) => {
-        return y(d[1]?.quantiles[2]);
+        return y(d[0]) + y.bandwidth() * bar_width_ratio;
       })
-      .attr("width", x.bandwidth() * (1 - bar_width_ratio))
-      .attr("height", (d) => {
-        return y(d[1]?.quantiles[0]) - y(d[1]?.quantiles[2]);
+      .attr("x", (d) => {
+        return x(d[1]?.quantiles[0]);
+      })
+      .attr("height", y.bandwidth() * (1 - bar_width_ratio))
+      .attr("width", (d) => {
+        return x(d[1]?.quantiles[2]) - x(d[1]?.quantiles[0]);
       })
       .attr("fill", function (d, i) {
         return getColor(d[0]);
@@ -319,11 +334,11 @@ export class VerticalRidgePlot extends RidgePlot {
             `<span>${d[0]}</span><br/><span>median: ${mets?.median.toFixed(
               2
             )}</span><br/><span>mean: ${mets?.mean.toFixed(2)}</span>
-            <br/><span>min: ${mets?.min.toFixed(2)}</span>
-            <br/><span>max: ${mets?.max.toFixed(2)}</span>`
+              <br/><span>min: ${mets?.min.toFixed(2)}</span>
+              <br/><span>max: ${mets?.max.toFixed(2)}</span>`
           )
-          .style("left", x(d[0]) + 20 + "px")
-          .style("top", propheight - margin.top - margin.bottom + "px");
+          .style("left", 100 + "px")
+          .style("top", y(d[0]) + "px");
       })
       .on("mouseout", function (event, d) {
         this._hoverKey = null;
@@ -334,17 +349,17 @@ export class VerticalRidgePlot extends RidgePlot {
     bars
       .enter()
       .append("line")
-      .attr("x1", (d) => {
-        return x(d[0]) + x.bandwidth() * bar_width_ratio;
-      })
-      .attr("x2", (d) => {
-        return x(d[0]) + x.bandwidth();
-      })
       .attr("y1", (d) => {
-        return y(d[1]?.min);
+        return y(d[0]) + y.bandwidth() * bar_width_ratio;
       })
       .attr("y2", (d) => {
-        return y(d[1]?.min);
+        return y(d[0]) + y.bandwidth();
+      })
+      .attr("x1", (d) => {
+        return x(d[1]?.min);
+      })
+      .attr("x2", (d) => {
+        return x(d[1]?.min);
       })
       .attr("stroke", "#353535")
       .attr("stroke-width", 1);
@@ -353,17 +368,17 @@ export class VerticalRidgePlot extends RidgePlot {
     bars
       .enter()
       .append("line")
-      .attr("x1", (d) => {
-        return x(d[0]) + x.bandwidth() * bar_width_ratio;
-      })
-      .attr("x2", (d) => {
-        return x(d[0]) + x.bandwidth();
-      })
       .attr("y1", (d) => {
-        return y(d[1]?.max);
+        return y(d[0]) + y.bandwidth() * bar_width_ratio;
       })
       .attr("y2", (d) => {
-        return y(d[1]?.max);
+        return y(d[0]) + y.bandwidth();
+      })
+      .attr("x1", (d) => {
+        return x(d[1]?.max);
+      })
+      .attr("x2", (d) => {
+        return x(d[1]?.max);
       })
       .attr("stroke", "#353535")
       .attr("stroke-width", 1);
@@ -372,17 +387,17 @@ export class VerticalRidgePlot extends RidgePlot {
     bars
       .enter()
       .append("line")
-      .attr("x1", (d) => {
-        return x(d[0]) + x.bandwidth() * bar_width_ratio;
-      })
-      .attr("x2", (d) => {
-        return x(d[0]) + x.bandwidth();
-      })
       .attr("y1", (d) => {
-        return y(d[1]?.median);
+        return y(d[0]) + y.bandwidth() * bar_width_ratio;
       })
       .attr("y2", (d) => {
-        return y(d[1]?.median);
+        return y(d[0]) + y.bandwidth();
+      })
+      .attr("x1", (d) => {
+        return x(d[1]?.median);
+      })
+      .attr("x2", (d) => {
+        return x(d[1]?.median);
       })
       .attr("stroke", "#353535")
       .attr("stroke-width", 1);

@@ -1,5 +1,5 @@
 export const data = {
-  category1: {
+  january: {
     min: 1,
     max: 20,
     mean: 10,
@@ -7,7 +7,7 @@ export const data = {
     values: [1, 2, 5, 20, 15, 18],
     quantiles: [1, 5, 9, 10],
   },
-  category2: {
+  february: {
     min: 10,
     max: 25,
     mean: 14,
@@ -15,7 +15,7 @@ export const data = {
     values: [10, 20, 25, 20, 15, 18, 12, 13],
     quantiles: [1, 18, 22, 25],
   },
-  category3: {
+  march: {
     min: 1,
     max: 10,
     mean: 5,
