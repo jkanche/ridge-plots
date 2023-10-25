@@ -1,13 +1,21 @@
 {
   "name": "ridges.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Create and visualize ridge plots",
   "repository": "https://github.com/jkanche/ridges.js",
   "homepage": "https://github.com/jkanche/ridges.js#readme",
-  "main": "src/index.js",
   "type": "module",
+  "main": "dist/ridges.js",
+  "module": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "node test/test.js",
+    "pretest": "npm run build",
+    "clean": "rm -rd dist/*",
+    "watchapp": "yarn clean && yarn dev && cp -r dist/* app",
+    "predeploy": "yarn clean && yarn build && cp -r dist/* app",
+    "deploy": "gh-pages -d app",
     "jsdoc": "npx jsdoc src README.md -d docs/built -c docs/jsdoc.config.json"
   },
   "keywords": [
@@ -23,12 +31,15 @@
   "license": "MIT",
   "bugs": "https://github.com/jkanche/ridges.js/issues",
   "dependencies": {
-    "d3-format": "^3.1.0",
-    "d3-scale-chromatic": "^3.0.0"
+    "d3": "^7.8.5"
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^11.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^7.0.0",
     "docdash": "^1.2.0",
+    "gh-pages": "^3.2.3",
     "jsdoc": "^3.6.10"
   }
 }

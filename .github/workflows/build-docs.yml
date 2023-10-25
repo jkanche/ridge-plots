@@ -1,7 +1,4 @@
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
       
 name: Build documentation
@@ -29,11 +26,11 @@ jobs:
     - name: Run JSDoc
       run: npm run jsdoc
 
-    # - name: create builds
-    #   run: yarn build
+    - name: create builds
+      run: npm run build
 
-    # - name: copy build to app
-    #   run: cp -r dist/* app
+    - name: copy build to app
+      run: cp -r dist/* app
 
     - name: copy docs to app
       run: cp -r docs/built/* app/docs
@@ -42,6 +39,7 @@ jobs:
       run: cp -r assets app/docs
 
     - name: GH Pages Deployment
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages # The branch the action should deploy to.

@@ -1,7 +1,5 @@
 on: [push]
 
-# on: [push]
-
 name: Build and publish to NPM
 
 jobs:
@@ -16,10 +14,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: install dependencies
-        run: yarn install
+        run: npm install --include-dev
 
-      # - name: create builds
-      #   run: yarn build
+      - name: create builds
+        run: npm run build
 
       - name: Publish to NPM
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
