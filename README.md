@@ -2,13 +2,17 @@
 
 A JavaScript library to make ridge plots. 
 
+![](assets/demo.png)
+
 Install the package from [npm](https://www.npmjs.com/package/ridges.js),
 
 ```bash
 npm install ridges.js
 ```
 
-The library offers both horizontal and vertical layouts for creating ridge plots. To get started, choose your preferred layout and then instantiate a new visualization object. Customize the visualization state by configuring properties such as titles, selected metrics, the number of ticks, and more. Next, input your data, and render the plot in your desired dimensions!
+The library offers both **horizontal** and **vertical** layouts for creating ridge plots. 
+
+To get started, choose your preferred layout and then instantiate a new visualization object. Customize the visualization state by configuring properties such as titles, selected metrics, the number of ticks, and more. Next, input your data, and render the plot in your desired dimensions!
 
 ```js
 import { VerticalRidgePlot, HorizontalRidgePlot } from "ridges.js";
