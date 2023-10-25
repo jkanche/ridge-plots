@@ -27,7 +27,7 @@ jobs:
       run: npm run jsdoc
 
     - name: create builds
-      run: yarn build
+      run: npm run build
 
     - name: copy build to app
       run: cp -r dist/* app
