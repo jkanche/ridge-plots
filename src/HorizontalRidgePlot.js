@@ -125,10 +125,10 @@ export class HorizontalRidgePlot extends RidgePlot {
       .style("text-anchor", "end")
       .each(wrap)
       .on("mouseover", (event, d) => {
-        const idx = this._dkeys.indexOf(d);
-        const mets = this._dentries[idx][1];
+        const idx = self._dkeys.indexOf(d);
+        const mets = self._dentries[idx][1];
 
-        this._hoverKey = idx;
+        self._hoverKey = idx;
         tip
           .style("opacity", 1)
           .html(
@@ -139,11 +139,13 @@ export class HorizontalRidgePlot extends RidgePlot {
             )}</span><br/><span>min: ${mets?.min.toFixed(2)}</span>
               <br/><span>max: ${mets?.max.toFixed(2)}</span>`
           )
-          .style("left", x(d) + 20 + "px")
-          .style("top", height + "px");
+          // .style("left", 100 + "px")
+          // .style("top", y(d.key) + "px");
+          .style("left", event.clientX + "px")
+          .style("top", event.clientY + "px");
       })
       .on("mouseout", function (event, d) {
-        this._hoverKey = null;
+        self._hoverKey = null;
         tip.style("opacity", 0);
       })
       .on("click", function (e, d) {
@@ -259,10 +261,10 @@ export class HorizontalRidgePlot extends RidgePlot {
           .curve(d3.curveCatmullRom)(bin.value);
       })
       .on("mouseover", function (event, d) {
-        const idx = this._dkeys.indexOf(d.key);
-        const mets = this._dentries[idx][1];
+        const idx = self._dkeys.indexOf(d.key);
+        const mets = self._dentries[idx][1];
 
-        this._hoverKey = idx;
+        self._hoverKey = idx;
 
         tip
           .style("opacity", 1)
@@ -274,11 +276,13 @@ export class HorizontalRidgePlot extends RidgePlot {
             )}</span><br/><span>min: ${mets?.min.toFixed(2)}</span>
               <br/><span>max: ${mets?.max.toFixed(2)}</span>`
           )
-          .style("left", 100 + "px")
-          .style("top", y(d.key) + "px");
+          // .style("left", 100 + "px")
+          // .style("top", y(d.key) + "px");
+          .style("left", event.clientX + "px")
+          .style("top", event.clientY + "px");
       })
       .on("mouseout", function (event, d) {
-        this._hoverKey = null;
+        self._hoverKey = null;
         tip.style("opacity", 0);
       });
 
@@ -329,10 +333,10 @@ export class HorizontalRidgePlot extends RidgePlot {
       })
       .style("opacity", 0.5)
       .on("mouseover", (event, d) => {
-        const idx = this._dkeys.indexOf(d[0]);
-        const mets = this._dentries[idx][1];
+        const idx = self._dkeys.indexOf(d[0]);
+        const mets = self._dentries[idx][1];
 
-        this._hoverKey = idx;
+        self._hoverKey = idx;
 
         tip
           .style("opacity", 1)
@@ -343,11 +347,13 @@ export class HorizontalRidgePlot extends RidgePlot {
               <br/><span>min: ${mets?.min.toFixed(2)}</span>
               <br/><span>max: ${mets?.max.toFixed(2)}</span>`
           )
-          .style("left", 100 + "px")
-          .style("top", y(d[0]) + "px");
+          // .style("left", 100 + "px")
+          // .style("top", y(d.key) + "px");
+          .style("left", event.clientX + "px")
+          .style("top", event.clientY + "px");
       })
       .on("mouseout", function (event, d) {
-        this._hoverKey = null;
+        self._hoverKey = null;
         tip.style("opacity", 0);
       });
 
