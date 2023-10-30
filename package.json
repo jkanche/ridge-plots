@@ -1,6 +1,6 @@
 {
   "name": "ridges.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Create and visualize ridge plots",
   "repository": "https://github.com/jkanche/ridges.js",
   "homepage": "https://github.com/jkanche/ridges.js#readme",

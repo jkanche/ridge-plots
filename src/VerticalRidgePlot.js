@@ -98,13 +98,13 @@ export class VerticalRidgePlot extends RidgePlot {
       .style("color", "#133355")
       .style("cursor", "pointer")
       .style("font-size", (d, i) => {
-        if (this._hoverKey === this._dkeys.indexOf(d)) {
+        if (self._hoverKey === self._dkeys.indexOf(d)) {
           return "14px";
         }
         return "12px";
       })
       .style("font-weight", (d, i) => {
-        if (this._hoverKey === this._dkeys.indexOf(d)) {
+        if (self._hoverKey === self._dkeys.indexOf(d)) {
           return "bold";
         }
         return "normal";
@@ -137,8 +137,8 @@ export class VerticalRidgePlot extends RidgePlot {
         tip.style("opacity", 0);
       })
       .on("click", function (e, d) {
-        const idx = this._dkeys.indexOf(d);
-        const mets = this._dentries[idx];
+        const idx = self._dkeys.indexOf(d);
+        const mets = self._dentries[idx];
         if (mets === null && "onClick" in self.state) {
           self.state.onClick(mets);
         }
