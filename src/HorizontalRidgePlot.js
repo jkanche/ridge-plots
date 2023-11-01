@@ -151,7 +151,7 @@ export class HorizontalRidgePlot extends RidgePlot {
       .on("click", function (e, d) {
         const idx = self._dkeys.indexOf(d);
         const mets = self._dentries[idx];
-        if (mets === null && "onClick" in self.state) {
+        if (mets !== null && mets !== undefined && "onClick" in self.state) {
           self.state.onClick(mets);
         }
       });
@@ -284,6 +284,13 @@ export class HorizontalRidgePlot extends RidgePlot {
       .on("mouseout", function (event, d) {
         self._hoverKey = null;
         tip.style("opacity", 0);
+      })
+      .on("click", function (e, d) {
+        const idx = self._dkeys.indexOf(d.key);
+        const mets = self._dentries[idx][1];
+        if (mets !== null && mets !== undefined && "onClick" in self.state) {
+          self.state.onClick(mets);
+        }
       });
 
     let bars = svg.selectAll("bars").data(this._dentries);
@@ -355,6 +362,13 @@ export class HorizontalRidgePlot extends RidgePlot {
       .on("mouseout", function (event, d) {
         self._hoverKey = null;
         tip.style("opacity", 0);
+      })
+      .on("click", function (e, d) {
+        const idx = self._dkeys.indexOf(d[0]);
+        const mets = self._dentries[idx][1];
+        if (mets !== null && mets !== undefined && "onClick" in self.state) {
+          self.state.onClick(mets);
+        }
       });
 
     // min
