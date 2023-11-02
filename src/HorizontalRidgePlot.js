@@ -55,6 +55,10 @@ export class HorizontalRidgePlot extends RidgePlot {
 
     let self = this;
 
+    self._width = width;
+    self._height = height;
+    self._margin = margin;
+
     if (this.elem.querySelector("svg")) {
       this.elem.querySelector("svg").innerHTML = "";
     }

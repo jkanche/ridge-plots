@@ -136,8 +136,8 @@ export class RidgePlot {
       svg
         .append("text")
         .attr("text-anchor", "end")
-        .attr("x", width)
-        .attr("y", height + margin.bottom)
+        .attr("x", this._width)
+        .attr("y", this._height + this._margin.bottom)
         .style("font-size", "10px")
         .style("font-style", "italic")
         .text(this.state.footer);
