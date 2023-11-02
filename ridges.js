@@ -162,8 +162,8 @@ class RidgePlot {
       svg
         .append("text")
         .attr("text-anchor", "end")
-        .attr("x", width)
-        .attr("y", height + margin.bottom)
+        .attr("x", this._width)
+        .attr("y", this._height + this._margin.bottom)
         .style("font-size", "10px")
         .style("font-style", "italic")
         .text(this.state.footer);
@@ -220,6 +220,10 @@ class VerticalRidgePlot extends RidgePlot {
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
     let self = this;
+
+    self._width = width;
+    self._height = height;
+    self._margin = margin;
 
     if (this.elem.querySelector("svg")) {
       this.elem.querySelector("svg").innerHTML = "";
@@ -638,6 +642,10 @@ class HorizontalRidgePlot extends RidgePlot {
     height = height - margin.top - margin.bottom;
 
     let self = this;
+
+    self._width = width;
+    self._height = height;
+    self._margin = margin;
 
     if (this.elem.querySelector("svg")) {
       this.elem.querySelector("svg").innerHTML = "";
